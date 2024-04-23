@@ -3,6 +3,14 @@ import { User } from "../model/user";
 import bcryptjs from "bcryptjs";
 
 class UserServices {
+	async findOne(email: string) {
+		const userFound = await pool.query("SELECT * FROM users WHERE email = $1", [
+			email,
+		]);
+
+		return userFound;
+	}
+
 	async register(user: User) {
 		console.log("entrou servicess");
 		const userRegistered = await pool.query(

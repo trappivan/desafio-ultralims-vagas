@@ -1,13 +1,27 @@
 "use client";
 
+import axios from "axios";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
 const Login = () => {
-	function submitForm(event: React.FormEvent) {
+	const [user, setUser] = useState({
+		email: "",
+		password: "",
+	});
+
+	async function submitForm(event: React.FormEvent) {
 		event.preventDefault();
 		console.log("Formulário enviado");
+		try {
+			await axios.post("/api/users/login", user).then((res) => {
+				console.log(res);
+			});
+		} catch (error) {
+			console.log(error);
+		}
 	}
+
 	return (
 		<div className=" bg-slate-800 h-screen w-full">
 			<div className="flex flex-col items-center justify-center h-full border-solid border border-green-600">
@@ -20,11 +34,13 @@ const Login = () => {
 							type="email"
 							placeholder="Email"
 							className="bg-slate-700 text-white p-2 rounded-lg border border-solid border-slate-200"
+							onChange={(e) => setUser({ ...user, email: e.target.value })}
 						/>
 						<input
 							type="password"
 							placeholder="Senha"
 							className="bg-slate-700 text-white p-2  rounded-lg border border-solid border-slate-200"
+							onChange={(e) => setUser({ ...user, password: e.target.value })}
 						/>
 						<button
 							type="submit"
