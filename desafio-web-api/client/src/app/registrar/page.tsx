@@ -1,15 +1,17 @@
 "use client";
 
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const Register = () => {
 	const [user, setUser] = useState({
 		email: "",
-		username: "",
 		password: "",
 		confirmPassword: "",
 	});
+
+	const router = useRouter();
 
 	async function submitForm(event: any) {
 		event.preventDefault();
@@ -19,12 +21,14 @@ const Register = () => {
 			user.email.length > 0
 		) {
 			await axios
-				.post("/api/users/register", user)
+				.post("http://localhost:4000/api/users/register", user)
 				.then((response) => {
 					console.log(response);
+
+					router.push("/login");
 				})
 				.catch((error) => {
-					console.log("errooo", error);
+					console.log("errooo no catch do axios", error);
 				});
 		}
 	}
@@ -41,15 +45,6 @@ const Register = () => {
 						placeholder="Email"
 						onChange={(e) => {
 							setUser({ ...user, email: e.target.value });
-						}}
-						className="bg-slate-700 text-white p-2 rounded-lg border border-solid border-slate-200"
-					/>
-
-					<input
-						type="text"
-						placeholder="Username"
-						onChange={(e) => {
-							setUser({ ...user, username: e.target.value });
 						}}
 						className="bg-slate-700 text-white p-2 rounded-lg border border-solid border-slate-200"
 					/>

@@ -5,22 +5,21 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
 	const path = request.nextUrl.pathname;
 
-	const publicPath = path == "/login" || path == "/registrar";
-	console.log(path);
+	const isPublicPath = path == "/login" || path == "/registrar" || path == "/";
 
 	const token = request.cookies.get("token")?.value || "";
 
-	if (publicPath && token) {
+	console.log(token);
+
+	if (isPublicPath && token) {
 		return NextResponse.redirect(new URL("/", request.nextUrl));
 	}
-	if (!publicPath && !token) {
+	if (!isPublicPath && !token) {
 		return NextResponse.redirect(new URL("/login", request.nextUrl));
 	}
-
-	// return NextResponse.redirect(new URL("/login", request.url));
 }
 
 // See "Matching Paths" below to learn more
 export const config = {
-	matcher: ["/", "/login", "/cep"],
+	matcher: ["/", "/login", "/registrar", "/cep"],
 };
